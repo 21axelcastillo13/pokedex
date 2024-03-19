@@ -4,7 +4,6 @@ import { Pokemon, PokemonAbility } from '../types/pokemonTypes';
 
 const PokemonDetailScreen = ({ route }: { route: any }) => {
   const { pokemon } = route.params;
-  const [abilities, setAbilities] = useState<PokemonAbility[]>(pokemon.abilities);
 
   return (
     <View style={styles.container}>
@@ -14,13 +13,9 @@ const PokemonDetailScreen = ({ route }: { route: any }) => {
         style={styles.image}
       />
       <Text style={styles.texto}>ID: {pokemon.url.split('/').slice(-2)[0]}</Text>
-      <Text style={styles.texto}>Name: {pokemon.name}</Text>
+      <Text style={styles.texto}>Nombre: {pokemon.name}</Text>
       <Text style={styles.texto}>Habilidades:</Text>
-        <FlatList
-          data={abilities}
-          renderItem={({ item }) => <Text>{item.ability.name}</Text>}
-          keyExtractor={(item) => item.ability.name}
-        />
+        
       </View>
     </View>
   );

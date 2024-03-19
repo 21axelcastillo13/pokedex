@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity, SafeAreaView } from 'react-native';
 import axios from 'axios';
 import { RootStackParamList } from '../types/navigationTypes';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Pokemon } from '../types/pokemonTypes';
+import { ScrollView } from 'react-native-gesture-handler';
 
 type PokemonListScreenNavigationProp = StackNavigationProp<RootStackParamList, 'PokemonList'>;
 
@@ -15,12 +16,12 @@ const PokemonListScreen: React.FC<Props> = ({ navigation }) => {
   const [pokemonList, setPokemonList] = useState<Pokemon[]>([]);
 
   useEffect(() => {
-    axios.get('https://pokeapi.co/api/v2/pokemon')
+    axios.get('https://pokeapi.co/api/v2/pokemon?limit=50')
       .then(response => {
         setPokemonList(response.data.results);
       })
       .catch(error => {
-        console.error('Error:', error);
+        console.error('Error en traer pokemon:', error);
       });
   }, []);
 
@@ -40,36 +41,42 @@ const PokemonListScreen: React.FC<Props> = ({ navigation }) => {
   );
 
   return (
+    <SafeAreaView>
     <View style={styles.container}>
-      <FlatList
+      <FlatList 
         data={pokemonList}
         renderItem={renderPokemonItem}
         keyExtractor={(item) => item.name}
+        numColumns={3}
       />
     </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+
   container: {
-    width:'100%',
     display:'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    flexDirection:'row',
     backgroundColor:'#fff',
-    
+    width:'100%',
+
   },
   item: {
-    flexDirection: 'row',
+    width:135,
+    height:200,
     alignItems: 'center',
+    justifyContent:'center',
     padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    borderWidth:1,
+    gap:10,
+
   },
   image: {
-    width: 80,
-    height: 80,
+    width: 100,
+    height: 100,
     marginRight: 10,
   },
   details: {
